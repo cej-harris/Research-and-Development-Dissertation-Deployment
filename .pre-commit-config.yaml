@@ -1,0 +1,125 @@
+repos:
+- repo: https://github.com/antonbabenko/pre-commit-terraform
+  rev: v1.77.0
+  hooks:
+    - id: terraform_fmt
+      name: Terraform fmt
+      description: Rewrites all Terraform configuration files to a canonical format.
+      entry: hooks/terraform_fmt.sh
+      language: script
+      files: (\.tf|\.tfvars)$
+      exclude: \.terraform\/.*$
+
+    - id: terraform_docs
+      name: Terraform docs
+      args:
+        - --hook-config=--path-to-file=README.md        # Valid UNIX path. I.e. ../TFDOC.md or docs/README.md etc.
+        - --hook-config=--add-to-existing-file=true     # Boolean. true or false
+        - --hook-config=--create-file-if-not-exist=true # Boolean. true or false
+        - --args=--config=.terraform-docs.yaml
+      description: Inserts input and output documentation into README.md (using terraform-docs).
+      require_serial: true
+      entry: hooks/terraform_docs.sh
+      files: (\.tf|\.terraform\.lock\.hcl)$
+      exclude: \.terraform\/.*$
+
+    # - id: terraform_docs_without_aggregate_type_defaults
+    #   name: Terraform docs (without aggregate type defaults)
+    #   description: Inserts input and output documentation into README.md (using terraform-docs). Identical to terraform_docs.
+    #   require_serial: true
+    #   entry: hooks/terraform_docs.sh
+    #   files: (\.tf)$
+    #   exclude: \.terraform\/.*$
+
+    # - id: terraform_docs_replace
+    #   name: Terraform docs (overwrite README.md)
+    #   description: Overwrite content of README.md with terraform-docs.
+    #   require_serial: true
+    #   entry: terraform_docs_replace
+    #   files: (\.tf)$
+    #   exclude: \.terraform\/.*$
+
+    - id: terraform_validate
+      name: Terraform validate
+      description: Validates all Terraform configuration files.
+      require_serial: true
+      entry: hooks/terraform_validate.sh
+      files: (\.tf|\.tfvars)$
+      exclude: \.terraform\/.*$
+
+    - id: terraform_providers_lock
+      name: Lock terraform provider versions
+      description: Updates provider signatures in dependency lock files.
+      require_serial: true
+      entry: hooks/terraform_providers_lock.sh
+      files: (\.terraform\.lock\.hcl)$
+      exclude: \.terraform\/.*$
+
+    - id: terraform_tfsec
+      name: Terraform validate with tfsec
+      description: Static analysis of Terraform templates to spot potential security issues.
+      require_serial: true
+      entry: hooks/terraform_tfsec.sh
+      language: script
+
+    - id: terraform_checkov
+      name: Checkov
+      description: Runs checkov on Terraform templates.
+      entry: hooks/terraform_checkov.sh
+      language: script
+      always_run: false
+      files: \.tf$
+      exclude: \.terraform\/.*$
+      require_serial: true
+
+    - id: terraform_wrapper_module_for_each
+      name: Terraform wrapper with for_each in module
+      description: Generate Terraform wrappers with for_each in module.
+      entry: hooks/terraform_wrapper_module_for_each.sh
+      language: script
+      pass_filenames: false
+      always_run: false
+      require_serial: true
+      files: \.tf$
+      exclude: \.terraform\/.*$
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+    - id: check-merge-conflict
+      name: check for merge conflicts
+      description: checks for files that contain merge conflict strings.
+      entry: check-merge-conflict
+      language: python
+      types: [text]
+    - id: check-yaml
+      name: check yaml
+      description: checks yaml files for parseable syntax.
+      entry: check-yaml
+      language: python
+      types: [yaml]
+    - id: detect-private-key
+      name: detect private key
+      description: detects the presence of private keys.
+      entry: detect-private-key
+      language: python
+      types: [text]
+    - id: check-symlinks
+      name: check for broken symlinks
+      description: checks for symlinks which do not point to anything.
+      entry: check-symlinks
+      language: python
+      types: [symlink]
+    - id: destroyed-symlinks
+      name: detect destroyed symlinks
+      description: detects symlinks which are changed to regular files with a content of a path which that symlink was pointing to.
+      entry: destroyed-symlinks
+      language: python
+      types: [file]
+    - id: end-of-file-fixer
+      name: fix end of files
+      description: ensures that a file is either empty, or ends with one newline.
+      entry: end-of-file-fixer
+      language: python
+      types: [text]
+      stages: [commit, push, manual]

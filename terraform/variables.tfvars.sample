@@ -1,0 +1,22 @@
+pm_host             = "PROXMOX-HOST"
+pm_password         = "PROXMOX-ROOT-PASSWORD"
+pm_node_name        = "PROXMOX-NODE-NAME"
+pm_tls_insecure     = true
+pvt_key             = "PRIVATE-KEY"
+num_k8s_masters     = NUM-OF-MASTER-NODES
+num_k8s_masters_mem = MASTER-NODE-MEMORY
+num_k8s_nodes       = NUM-OF-WORKER-NODES
+num_k8s_nodes_mem   = WORKER-NODE-MEMORY
+template_vm_name    = "TEMPLATE-NAME"
+master_ips = [
+  "MASTER-IP-1",
+  "MASTER-IP-2",
+  "...",
+  "MASTER-IP-N"
+]
+worker_ips = [
+  "WORKER-IP-1",
+  "WORKER-IP-2",
+  "...",
+  "WORKER-IP-3",
+]

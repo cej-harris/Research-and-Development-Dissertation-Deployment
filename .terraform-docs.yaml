@@ -1,0 +1,17 @@
+formatter: markdown table
+sections:
+  show:
+    - header
+    - inputs
+    - providers
+    - modules
+    - footer
+sort:
+  enabled: true
+  by: required
+settings:
+  indent: 4
+  escape: false
+  default: false
+  required: false
+  type: true
