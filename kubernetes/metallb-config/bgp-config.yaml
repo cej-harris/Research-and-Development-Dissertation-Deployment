@@ -1,0 +1,15 @@
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: pfsense
+  namespace: metallb-system
+spec:
+  myASN: KUBERNETES-ASN
+  peerASN: BGP-PEER-ASN
+  peerAddress: BGP-PEER-IP-ADDRESS
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: all
+  namespace: metallb-system

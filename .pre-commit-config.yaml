@@ -98,6 +98,7 @@ repos:
       entry: check-yaml
       language: python
       types: [yaml]
+      args: [--allow-multiple-documents]
     - id: detect-private-key
       name: detect private key
       description: detects the presence of private keys.
